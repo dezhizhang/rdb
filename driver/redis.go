@@ -23,3 +23,7 @@ func Redis() *redis.Client {
 	})
 	return redisClient
 }
+
+func init() {
+	Redis()
+}

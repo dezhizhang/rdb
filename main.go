@@ -1,18 +1,25 @@
 package main
 
 import (
-	"context"
-	"log"
+	"github.com/gin-gonic/gin"
 	"rdb/driver"
 )
 
 func main() {
-	ctx := context.Background()
-	ret := driver.Redis().Get(ctx,"name")
-	val,err := ret.Result()
-	if err != nil {
-		log.Fatal(err)
-		return
-	}
-	log.Println(val)
+	r := gin.Default()
+	r.Use(func(c *gin.Context) {
+		defer func() {
+			if e := recover();e != nil {
+				c.AbortWithStatusJSON(400,gin.H{"message":e})
+			}
+		}()
+		c.Next()
+	})
+	r.GET("/", func(c *gin.Context) {
+		locker := driver.NewLocker("locker").Locker()
+		defer locker.Unlock()
+		c.JSON(200,gin.H{"message":"ok"})
+	})
+
+	r.Run()
 }
