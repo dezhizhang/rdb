@@ -25,7 +25,5 @@ func Redis() *redis.Client {
 		}
 		log.Fatal(pong)
 	})
-
 	return redisClient
-
 }

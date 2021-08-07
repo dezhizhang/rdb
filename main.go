@@ -9,10 +9,10 @@ import (
 func main() {
 	ctx := context.Background()
 	ret := driver.Redis().Get(ctx,"name")
-	value,err := ret.Result()
+	val,err := ret.Result()
 	if err != nil {
 		log.Fatal(err)
+		return
 	}
-	log.Println(value)
-
+	log.Println(val)
 }
